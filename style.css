@@ -1,0 +1,198 @@
+/* Styles for Spell with Hen */
+
+/* OpenDyslexic: a free font designed to be easier to read for people with dyslexia.
+   The letters are weighted at the bottom, which helps stop them flipping or rotating
+   (b/d, p/q). It is loaded from the fonts/ folder next to this file. Licence: fonts/OFL.txt */
+@font-face{font-family:'OpenDyslexic';src:url('fonts/opendyslexic-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'OpenDyslexic';src:url('fonts/opendyslexic-bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+
+/* Colours and sizes used across the page. Change them here to re-theme the whole game.
+   Each of the four steps has its own colour: Look = purple, Cover = blue, Write = coral, Check = green. */
+:root{
+  --bg:#FFF7EA; --ink:#1F2A44; --muted:#626B80; --card:#FFFFFF; --line:#EBDDC4; --field:#FFFDF8;
+  --coral:#E8573F; --coral-d:#C4412C; --sun:#FFC531; --sun-d:#E0A400;
+  --green:#2A9D68; --green-d:#1E7A50; --green-bg:#E3F5EC;
+  --red:#D24343; --red-bg:#FCE6E4;
+  --blue:#3D6FD6; --blue-d:#2A54AE; --purple:#7B57C8;
+  --radius:18px; --shadow:0 2px 0 rgba(31,42,68,.06),0 10px 28px rgba(31,42,68,.06);
+}
+/* ---------- Basics ---------- */
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:'OpenDyslexic',system-ui,sans-serif;min-height:100vh;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+[hidden]{display:none!important}
+
+/* ---------- Header with the hen logo ---------- */
+.top{display:flex;align-items:center;gap:14px;padding:18px clamp(16px,4vw,40px);max-width:1180px;margin:0 auto}
+.logo{width:52px;height:52px;flex:none;display:grid;place-items:center;font-size:32px;line-height:1;background:#fff;border:2px solid var(--line);border-radius:15px;
+  /* Use the device's colour emoji font for the hen, not OpenDyslexic */
+  font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
+.top h1{font-size:clamp(21px,3vw,28px);margin:0;font-weight:700;letter-spacing:-.01em;line-height:1.1}
+.top p{margin:3px 0 0;color:var(--muted);font-size:14px;font-weight:400}
+main{padding:0 clamp(16px,4vw,40px) 40px;max-width:1180px;margin:0 auto}
+
+/* ---------- Setup screen: the lists on the left, chosen words and settings on the right ---------- */
+.panel{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.setup-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:20px;align-items:start}
+@media(max-width:860px){.setup-grid{grid-template-columns:1fr}}
+h2{font-size:21px;margin:0 0 4px;font-weight:700}
+.sub{color:var(--muted);font-size:14.5px;margin:0 0 16px;font-weight:400}
+.count-badge{display:inline-grid;place-items:center;min-width:30px;height:28px;padding:0 8px;border-radius:999px;background:var(--coral);color:#fff;font-size:15px;vertical-align:2px;margin-left:4px}
+
+.lists{display:flex;flex-direction:column;gap:10px}
+.list-item{display:flex;align-items:center;gap:8px}
+/* Each list is a big tappable row with a tick box. ".sel" means it is chosen. */
+.list-row{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--line);border-radius:14px;background:var(--field);text-align:left;transition:border-color .15s,background .15s}
+.list-row.sel{border-color:var(--coral);background:#FFF0EA}
+.tick{width:28px;height:28px;border-radius:9px;border:2px solid #D8C9AE;display:grid;place-items:center;flex:none;background:#fff;transition:all .15s}
+.tick svg{opacity:0}
+.list-row.sel .tick{background:var(--coral);border-color:var(--coral)}
+.list-row.sel .tick svg{opacity:1}
+.grow{flex:1;min-width:0}
+.list-name{display:block;font-weight:700;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list-count{display:block;color:var(--muted);font-size:13px;font-weight:400}
+.empty{color:var(--muted);font-size:15px;padding:8px 0;margin:0}
+
+/* Buttons. The coloured shadow underneath makes them look pressable,
+   and they "sink" a little when tapped. */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:14px;padding:12px 20px;font-weight:700;font-size:16px;background:#F1E7D4;color:var(--ink);box-shadow:0 3px 0 #DCCCAE;transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #DCCCAE}
+.btn.primary{background:var(--coral);color:#fff;box-shadow:0 4px 0 var(--coral-d)}
+.btn.primary:active{box-shadow:0 1px 0 var(--coral-d)}
+.btn.green{background:var(--green);color:#fff;box-shadow:0 4px 0 var(--green-d)}
+.btn.green:active{box-shadow:0 1px 0 var(--green-d)}
+.btn.blue{background:var(--blue);color:#fff;box-shadow:0 4px 0 var(--blue-d)}
+.btn.blue:active{box-shadow:0 1px 0 var(--blue-d)}
+.btn.ghost{background:transparent;box-shadow:none;color:var(--muted);padding:10px 12px}
+.btn.danger{background:var(--red-bg);color:var(--red);box-shadow:0 3px 0 #F0C4BF}
+.btn.small{padding:8px 14px;font-size:14px;border-radius:11px}
+.btn.big{font-size:22px;padding:15px 30px;border-radius:18px}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.new-list{margin-top:12px;width:100%;border:2px dashed #D8C9AE;background:transparent;box-shadow:none;color:var(--muted)}
+.new-list:active{box-shadow:none}
+
+/* The form for making or editing a list */
+label.field{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
+input[type=text],textarea{width:100%;font-family:'OpenDyslexic',sans-serif;font-size:18px;color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--field);outline:none}
+input:focus,textarea:focus{border-color:var(--coral)}
+textarea{min-height:190px;resize:vertical;line-height:1.5}
+.hint{font-size:13px;color:var(--muted);margin:6px 0 14px;font-weight:400;line-height:1.45}
+.err{color:var(--red);font-size:14px;font-weight:700;margin:10px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips.center{justify-content:center}
+.chip{font-family:'OpenDyslexic',sans-serif;font-size:17px;padding:4px 12px;border-radius:999px;background:#FFF3D6;border:1.5px solid #F2DA9C}
+.chosen{max-height:260px;overflow:auto;padding:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* Settings are on/off switches. aria-pressed="true" turns the switch green. */
+.settings{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+@media(max-width:520px){.settings{grid-template-columns:1fr}}
+.toggle{display:flex;align-items:center;gap:10px;padding:11px 12px;border:2px solid var(--line);border-radius:12px;background:var(--field);text-align:left;font-weight:400;font-size:15px}
+.switch{width:42px;height:24px;border-radius:999px;background:#DCCFB8;position:relative;flex:none;transition:background .15s}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s}
+.toggle[aria-pressed=true] .switch{background:var(--green)}
+.toggle[aria-pressed=true] .switch::after{transform:translateX(18px)}
+.toggle .val{margin-left:auto;background:#F1E7D4;padding:3px 10px;border-radius:999px;font-weight:700;font-size:13px;white-space:nowrap}
+.go-wrap{display:flex;justify-content:flex-end}
+.privacy{font-size:13px;color:var(--muted);text-align:center;margin:26px auto 0;font-weight:400;max-width:560px;line-height:1.5}
+
+/* ---------- Game screen ---------- */
+
+/* The panel on the left: how many words are left, plus one light per word.
+   A light glows yellow when its word is spelled right, or is dashed if the child skipped it. */
+.game-grid{display:grid;grid-template-columns:116px minmax(0,1fr);gap:20px;align-items:start}
+.rail{position:sticky;top:16px;text-align:center;padding:18px 10px}
+.togo{font-size:46px;font-weight:700;line-height:1}
+.togo-label{font-size:13px;color:var(--muted);font-weight:700;margin:4px 0 16px}
+.lights{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.light{width:20px;height:20px;border-radius:50%;background:#EEE5D3;border:2px solid #DED0B5;transition:all .35s}
+.light.current{border-color:var(--ink);transform:scale(1.12)}
+.light.on{background:var(--sun);border-color:var(--sun-d);box-shadow:0 0 0 4px rgba(255,197,49,.25),0 0 14px rgba(255,197,49,.85)}
+.light.miss{background:#fff;border-color:#EE9A88;border-style:dashed}
+/* On phones the side panel moves to the top and becomes a single row */
+@media(max-width:720px){
+  .game-grid{grid-template-columns:1fr;gap:14px}
+  .rail{position:static;display:flex;align-items:center;gap:14px;text-align:left;padding:12px 16px}
+  .togo{font-size:32px}.togo-label{margin:0;width:56px;line-height:1.15}
+  .lights{justify-content:flex-start;flex:1;gap:6px}.light{width:14px;height:14px}
+}
+.game-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.wordnum{color:var(--muted);font-weight:700;font-size:15px}
+/* The "1 Look  2 Cover  3 Write  4 Check" bar. The current step lights up in its colour. */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.step{text-align:center;padding:9px 4px;border-radius:12px;background:#F3EAD8;color:#A0977F;font-weight:700;font-size:16px;transition:all .25s}
+.step.past{color:var(--ink)}
+.step.active{color:#fff;transform:translateY(-1px)}
+.step.look.active{background:var(--purple)}
+.step.cover.active{background:var(--blue)}
+.step.write.active{background:var(--coral)}
+.step.check.active{background:var(--green)}
+
+/* The big card that shows the word. The striped blue "flap" sits just above the card
+   and slides down over the word when it is covered. */
+.stage{position:relative}
+.wordcard{position:relative;background:var(--card);border:2px solid var(--line);border-radius:22px;min-height:190px;display:grid;place-items:center;padding:30px 24px;overflow:hidden;box-shadow:var(--shadow)}
+.wordcard.good{border-color:#9ED7BC;background:var(--green-bg)}
+.word{font-family:'OpenDyslexic',sans-serif;font-weight:700;line-height:1.15;text-align:center}
+.word.ok{color:var(--green-d)}
+.flap{position:absolute;inset:0;background:repeating-linear-gradient(45deg,var(--blue) 0 18px,#4B7DE2 18px 36px);display:grid;place-items:center;color:#fff;font-size:28px;font-weight:700;transform:translateY(-104%);transition:transform .55s cubic-bezier(.3,1.25,.5,1)}
+.wordcard.covered .flap{transform:translateY(0)}
+/* The shrinking bar along the bottom of the card when "cover automatically" is on */
+.autobar{position:absolute;left:0;bottom:0;height:7px;width:100%;background:var(--purple);transform-origin:left;animation:shrink linear forwards}
+@keyframes shrink{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.actions{display:flex;justify-content:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.prompt{text-align:center;color:var(--muted);font-weight:400;margin:14px 0 0;font-size:16px}
+
+/* Write step: a small striped strip (the word is still covered), the answer area and the keyboard */
+.covered-mini{position:relative;min-height:62px;border-radius:16px;background:repeating-linear-gradient(45deg,var(--blue) 0 14px,#4B7DE2 14px 28px);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;padding:8px 20px}
+.answer{min-height:104px;margin:14px 0;background:#fff;border:2px solid var(--line);border-radius:18px;display:flex;align-items:center;justify-content:center;padding:12px}
+.typed{font-family:'OpenDyslexic',sans-serif;font-size:clamp(28px,5.5vw,52px);font-weight:700;line-height:1.15;overflow-wrap:anywhere;text-align:center}
+.placeholder{color:#B9AF9A;font-size:18px;font-family:'OpenDyslexic',sans-serif;font-weight:400;letter-spacing:0}
+.caret{display:inline-block;width:3px;height:.85em;background:var(--coral);vertical-align:-.06em;margin-left:3px;border-radius:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+/* Letter boxes, used when "Show how many letters" is on. "next" underlines where the next letter goes. */
+.boxes{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.box{width:clamp(30px,5.6vw,52px);height:clamp(44px,8vw,68px);border-bottom:4px solid #D8C9AE;font-family:'OpenDyslexic',sans-serif;font-size:clamp(22px,4.2vw,38px);font-weight:700;display:grid;place-items:center}
+.box.next{border-color:var(--coral)}
+.box.gap{border-color:transparent;width:16px}
+.box.extra{border-color:#F0B2A6}
+
+/* The on-screen keyboard. Keys are big enough for small fingers on a tablet. */
+.kb{display:flex;flex-direction:column;gap:8px;user-select:none;-webkit-user-select:none}
+.kb-row{display:flex;gap:6px;justify-content:center}
+.key{flex:1;max-width:64px;min-width:0;height:58px;border-radius:12px;background:#fff;border:1.5px solid #E7DAC2;box-shadow:0 3px 0 #D9CBB0;font-family:'OpenDyslexic',sans-serif;font-size:22px;font-weight:700;display:grid;place-items:center;padding:0;transition:transform .05s}
+.key:active{transform:translateY(2px);box-shadow:0 1px 0 #D9CBB0;background:#FFF0EA}
+.key.wide{max-width:100px;flex:1.5;font-family:'OpenDyslexic',sans-serif;font-size:20px}
+.key.space{max-width:280px;flex:4;font-family:'OpenDyslexic',sans-serif;font-size:16px;font-weight:700;color:var(--muted)}
+.key.sym{max-width:64px}
+.key.shift.on{background:var(--coral);color:#fff;border-color:var(--coral-d)}
+@media(max-width:480px){.top h1{font-size:19px}.step{font-size:13px;padding:8px 2px}.covered-mini{font-size:15px}.key{height:48px;font-size:21px;border-radius:9px}.kb-row{gap:4px}.kb{gap:6px}.btn.big{font-size:19px;padding:13px 22px}}
+
+/* Check step: "You wrote" vs "The word is".
+   Wrong letters get a red wavy underline. Letters they missed in the real word are highlighted yellow. */
+.verdict{text-align:center;font-size:30px;font-weight:700;margin:16px 0 4px}
+.verdict.good{color:var(--green)}
+.verdict.bad{color:var(--coral-d);margin:0 0 16px}
+.cmp{background:#fff;border:2px solid var(--line);border-radius:22px;padding:22px 20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px 18px;align-items:center;box-shadow:var(--shadow)}
+.cmp .lab{font-size:14px;color:var(--muted);font-weight:700;text-align:right;line-height:1.2}
+.cmp .w{font-family:'OpenDyslexic',sans-serif;font-weight:700;font-size:clamp(26px,5vw,46px);line-height:1.2;overflow-wrap:anywhere}
+.l.ok{color:var(--green)}
+.l.bad{color:var(--red);text-decoration:underline wavy;text-decoration-thickness:2px;text-underline-offset:6px}
+.l.watch{background:#FFE48A;border-radius:6px;box-shadow:0 0 0 2px #FFE48A}
+.cmp-note{grid-column:1/-1;text-align:center;color:var(--muted);font-size:14px;font-weight:400;margin:0}
+.cmp-note mark{background:#FFE48A;padding:0 5px;border-radius:4px;color:var(--ink)}
+
+/* A little burst of confetti when a word is spelled right */
+.confetti{position:absolute;left:50%;top:90px;width:10px;height:14px;margin-left:-5px;border-radius:2px;pointer-events:none;animation:pop 1.1s cubic-bezier(.2,.7,.4,1) forwards;z-index:5}
+@keyframes pop{to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
+
+/* ---------- End screen ---------- */
+.done{max-width:640px;margin:10px auto 0;text-align:center;position:relative;padding:34px 24px}
+.done-title{font-size:clamp(24px,4vw,32px);margin:12px 0 6px}
+.done-stat{font-size:19px;color:var(--muted);margin:0 0 22px;font-weight:400}
+.done-stat b{color:var(--ink)}
+.done h3{font-size:16px;margin:0 0 10px;font-weight:700}
+
+/* Respect devices set to "reduce motion": switch off all animations */
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
